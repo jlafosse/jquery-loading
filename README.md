@@ -11,9 +11,11 @@ Include script *after* the jQuery library (unless you are packaging scripts in a
 Usage
 =====
 Start the loading
+
     $('#foo').loading();
     
 Stop the loading
+
     $('#foo').loading();
     
 Options
