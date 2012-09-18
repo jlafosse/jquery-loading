@@ -5,7 +5,7 @@
 */
 
 /**
- * The loading plugin overlays a "waiting spinner" over an element that is typically being called through ajax or hijack
+ * The loading plugin overlays a "waiting spinner" over an element that is typically being called through ajax or hijack.
  *
  * Loading
  * Basic Usage: $(this).loading({..});
