@@ -49,6 +49,7 @@ Development
 - Source hosted at [GitHub](https://github.com/jlafosse/jquery-loading)
 - Report issues, questions, feature requests on [GitHub Issues](https://github.com/jlafosse/jquery-loading/issues)
 
+
 Authors
 =======
 [Jason LaFosse](https://github.com/jlafosse)
