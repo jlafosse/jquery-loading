@@ -26,7 +26,7 @@
             var settings = $.extend({
                 delay:250,
                 css: {'opacity':'.75','background-color':'#ffffff','z-index':'9997'},
-                img: {'src':'images/mozilla_blue.gif','width':'16','height':'16','border':'0','align':'middle','valign':'center'},
+                img: {'src':'/images/mozilla_blue.gif','width':'16','height':'16','border':'0','align':'middle','valign':'center'},
                 includeBorder: false,
                 imgInViewport:true
             },options);
