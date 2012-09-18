@@ -21,20 +21,25 @@ Stop the loading
 Options
 =======
 
-    delay (int Default:250ms)
-Sets a delay on when the loading icon will appear. This helps prevent "flashing" of the content in cases where the response might be very quick.
+- **delay** [Number:250]
 
-    css (object Default:{'opacity':'.75','background-color':'#ffffff','z-index':'99'})
-Sets the css attributes for the loading overlay
+    Sets a delay (in milliseconds) on when the loading icon will appear. This helps prevent "flashing" of the content in cases where the response might be very quick.
 
-    img (object Default:{'src':'/images/mozilla_blue.gif','width':'16','height':'16','border':'0'})
-Sets the img attributes for the loading image
+- **css** [Object:{'opacity':'.75','background-color':'#ffffff','z-index':'99'}]
 
-    includeBorder (boolean Default:true)
-Sets whether or not to include the target element border
+    Sets the css attributes for the loading overlay.
 
-    imgInViewport (boolean Default:true)
-Sets whether or not the loading image is centered in the viewport relative to the div
+- **img** [Object:{'src':'/images/mozilla_blue.gif','width':'16','height':'16','border':'0'}]
+
+    Sets the img attributes for the loading image.
+
+- **includeBorder** [Boolean:true]
+
+    Sets whether or not to include the target element border.
+
+- **imgInViewport** [Boolean:true]
+
+    Sets whether or not the loading image is centered in the viewport relative to the div.
 
 Changelog
 =========
