@@ -72,8 +72,12 @@
             img.appendTo(div).css({'position':'absolute','top':(imgTop-(img.height()/2)),'left':((width/2)-(img.width()/2)),'z-index':99999});
             div.show().position({my:'left top', at:'left top', of:$self, offset:offset}).hide();
             
-            var toggleLoader = function(){  
-                $(div).toggle(); 
+            var toggleLoader = function(){
+                if ( $(div).is(':visible') ) {
+                    $(div).hide();
+                } else {
+                    $(div).show();
+                }
             };
             var t = setTimeout(toggleLoader,settings.delay);
             
