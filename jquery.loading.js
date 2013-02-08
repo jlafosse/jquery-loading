@@ -1,5 +1,5 @@
 /**
- * Loading v1.0.0 - jQuery Plugin
+ * Loading v1.1.0 - jQuery Plugin
  * Copyright (c) 2012 Jason LaFosse
  * Licensed under MIT and GPL
 */
@@ -8,81 +8,120 @@
  * The loading plugin overlays a "waiting spinner" over an element that is typically being called through ajax or hijack.
  *
  * Loading
- * Basic Usage: $(this).loading({..});
+ * Show: $(this).loading('show',{..});
+ * Hide: $(this).loading('hide',{..});
 */
 ;(function($) {
+    
+    var Loading = function (element, options) {
+        this.init(element, options);
+    }
 
-    $.fn.loading = function(options){
+    Loading.prototype = {
         
-        return this.each(function(){
-            
-            var $self = $(this);
+        init: function(element,options) {
 
-            if ($self.find('div.loading').size()) {
-                $self.find('div.loading').remove();
-                return $self;    
-            }
-                
-            var settings = $.extend({
-                delay:250,
-                css: {'opacity':'.75','background-color':'#ffffff','z-index':'9997'},
-                img: {'src':'/images/mozilla_blue.gif','width':'16','height':'16','border':'0','align':'middle','valign':'center'},
-                includeBorder: false,
-                imgInViewport:true
-            },options);
+            this.$element = $(element);
+            this.options = options;
             
-            var top = 0;
-            var left = 0;
-            var width = $self.outerWidth();
-            var height = $self.outerHeight() + $self.scrollTop();
-            var offset = '0 0';
+            var top = 0,
+                left = 0,
+                width = this.$element.outerWidth(),
+                height = this.$element.outerHeight() + this.$element.scrollTop(),
+                offset = '0 0';
 
-            if (!settings.includeBorder) {
-                width = width - parseInt($self.css('border-left-width')) - parseInt($self.css('border-right-width'));
-                height = height - parseInt($self.css('border-top-width')) - parseInt($self.css('border-bottom-width'));
-                offset = parseInt($self.css('border-left-width')) + ' ' + parseInt($self.css('border-top-width'));
+            if (!options.includeBorder) {
+                width = width - parseInt(this.$element.css('border-left-width')) - parseInt(this.$element.css('border-right-width'));
+                height = height - parseInt(this.$element.css('border-top-width')) - parseInt(this.$element.css('border-bottom-width'));
+                offset = parseInt(this.$element.css('border-left-width')) + ' ' + parseInt(this.$element.css('border-top-width'));
             }
             
-            var imgTop = (height + $self.scrollTop())/2;
+            var imgTop = (height + this.$element.scrollTop())/2;
             
-            if (settings.imgInViewport) {
+            if (options.imgInViewport) {
              
-                var docH = $(document).height();
-                var winH = $(window).height();
-                var scrT = $(document).scrollTop();
-                var scrB = docH - winH - scrT;
-                var divH = height;
-                var divT = $self.offset().top;
-                var divB = divT + divH;
-                 
-                var topO = scrT - divT;
+                var docH = $(document).height(),
+                    winH = $(window).height(),
+                    scrT = $(document).scrollTop(),
+                    scrB = (docH - winH - scrT),
+                    divH = height,
+                    divT = this.$element.offset().top,
+                    divB = (divT + divH),
+                    topO = (scrT - divT),
+                    botO = (divB - (docH - scrB));
+                    
                 if (topO < 0) topO = 0;
-                
-                var botO = divB - (docH - scrB);
                 if (botO < 0) botO = 0;
                 
                 var inView = divH - (topO + botO);
-                
                 imgTop = topO + (inView/2);
                             
             }
 
-            var div = $("<div />").css({'display':'none','position':'absolute','top':top,'left':left,'height':height,'width':width}).css(settings.css).addClass('loading').appendTo($self);
-            var img = $("<img />").attr(settings.img);
+            var div = $("<div />").css({'display':'none','position':'absolute','top':top,'left':left,'height':height,'width':width}).css(options.css).addClass('loading').appendTo(this.$element);
+            var img = $("<img />").attr(options.img);
             img.appendTo(div).css({'position':'absolute','top':(imgTop-(img.height()/2)),'left':((width/2)-(img.width()/2)),'z-index':99999});
-            div.show().position({my:'left top', at:'left top', of:$self, offset:offset}).hide();
+            div.show().position({my:'left top', at:'left top', of:this.$element, offset:offset}).hide();
             
-            var toggleLoader = function(){
-                if ( $(div).is(':visible') ) {
-                    $(div).hide();
-                } else {
-                    $(div).show();
-                }
-            };
-            var t = setTimeout(toggleLoader,settings.delay);
+            this.$element = div;
             
-        });
-            
+        },
+        
+        
+        show: function() {
+            var $el = this.$element;
+            setTimeout(function(){
+                $el.show();
+            },this.options.delay);  
+        },
+        
+        
+        hide: function() {
+            this.$element.hide();
+        }
+        
     };
+        
+    
+    /* LOADING PLUGIN DEFINITION
+    * ======================= */
+    var old = $.fn.loading;
+    
+    $.fn.loading = function(){
+        
+        var args = $.makeArray(arguments),
+            option = args.shift();
+
+        return this.each(function(){
+            
+            var $this = $(this),
+                data = $this.data('loading'),
+                options = (typeof option == 'object') ? option : args[0],
+                options = $.extend({}, $.fn.loading.defaults, $this.data(), options);
+
+            if ( !data ) {
+                $this.data('loading', (data = new Loading(this, options)));
+            }
+            if (typeof option == 'string') {
+                data[option].apply( data, args );
+            }
+            else if ( options.show ) {
+                data.show.apply( data, args );
+            }
+ 
+        });
+    
+    };
+    
+    $.fn.loading.defaults = {
+        delay:250,
+        css: {'opacity':'.75','background-color':'#ffffff','z-index':'9997'},
+        img: {'src':'/images/mozilla_blue.gif','width':'16','height':'16','border':'0','align':'middle','valign':'center'},
+        includeBorder: false,
+        imgInViewport:true
+    };
+
+    $.fn.loading.Constructor = Loading;
+    
 
 })(jQuery);
